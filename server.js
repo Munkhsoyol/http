@@ -81,6 +81,36 @@ const server = http.createServer((req, res) => {
             res.setHeader("content-type", "image/png");
             res.end(data);
         });
+    } else if (
+        url.endsWith(".pdf") 
+    ) {
+        const parsed = urlLib.parse(url);
+        const fileName = path.basename(parsed.pathname);
+        fs.readFile("./src/pdf/" + fileName, (error, data) => {
+            res.statusCode = 200;
+            res.setHeader("content-type", "application/pdf");
+            res.end(data);
+        });
+    } else if (
+        url.endsWith(".css") 
+    ) {
+        const parsed = urlLib.parse(url);
+        const fileName = path.basename(parsed.pathname);
+        fs.readFile("./src/css/" + fileName, (error, data) => {
+            res.statusCode = 200;
+            res.setHeader("content-type", "text/css");
+            res.end(data);
+        });
+    } else if (
+        url.endsWith(".js") 
+    ) {
+        const parsed = urlLib.parse(url);
+        const fileName = path.basename(parsed.pathname);
+        fs.readFile("./src/js/" + fileName, (error, data) => {
+            res.statusCode = 200;
+            res.setHeader("content-type", "text/javascript");
+            res.end(data);
+        });
     } else {
         res.statusCode = 404;
         res.write("<h1>404 not found</h1>");
