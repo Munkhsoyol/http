@@ -1,5 +1,7 @@
 const http = require("http");
 const fs = require("fs");
+const urlLib = require("url");
+const path = require("path");
 
 const server = http.createServer((req, res) => {
     const { headers, url, method } = req;
@@ -67,6 +69,17 @@ const server = http.createServer((req, res) => {
             res.statusCode = 200;
             res.write(data);
             res.end();
+        });
+    } else if (
+        url.endsWith(".jpg") ||
+        url.endsWith(".png") 
+    ) {
+        const parsed = urlLib.parse(url);
+        const fileName = path.basename(parsed.pathname);
+        fs.readFile("./src/img/" + fileName, (error, data) => {
+            res.statusCode = 200;
+            res.setHeader("content-type", "image/png");
+            res.end(data);
         });
     } else {
         res.statusCode = 404;
